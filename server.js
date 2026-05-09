@@ -17,8 +17,20 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.use('/api', schoolRoutes);
+// Root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'Success',
+    message: 'School Management API is running successfully',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      addSchool: '/api/addSchool',
+      listSchools: '/api/listSchools'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -28,6 +40,9 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// API Routes
+app.use('/api', schoolRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
@@ -40,10 +55,24 @@ app.use('*', (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
+// Global error handlers to prevent app crash
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err.message);
 });
+
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Rejection:', err);
+});
+
+// Start server with safe startup
+try {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`Root URL: http://localhost:${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/health`);
+  });
+} catch (err) {
+  console.error('Failed to start server:', err.message);
+}
 
 module.exports = app;
