@@ -1,0 +1,137 @@
+{
+  "info": {
+    "name": "School Management API",
+    "description": "Collection for testing School Management APIs with Node.js, Express, and MySQL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/../health",
+          "host": ["{{baseUrl}}"],
+          "path": ["..", "health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add School",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test School\",\n  \"address\": \"123 Test Street, Test City\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/addSchool",
+          "host": ["{{baseUrl}}"],
+          "path": ["addSchool"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Schools (with location)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/listSchools?latitude=28.6139&longitude=77.2090",
+          "host": ["{{baseUrl}}"],
+          "path": ["listSchools"],
+          "query": [
+            {
+              "key": "latitude",
+              "value": "28.6139",
+              "description": "User's latitude for proximity calculation"
+            },
+            {
+              "key": "longitude",
+              "value": "77.2090",
+              "description": "User's longitude for proximity calculation"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Schools",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/schools",
+          "host": ["{{baseUrl}}"],
+          "path": ["schools"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get School by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/schools/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["schools", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add School - Validation Error (Missing Name)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"address\": \"123 Test Street, Test City\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/addSchool",
+          "host": ["{{baseUrl}}"],
+          "path": ["addSchool"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Schools - Validation Error (Missing Coordinates)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/listSchools",
+          "host": ["{{baseUrl}}"],
+          "path": ["listSchools"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
